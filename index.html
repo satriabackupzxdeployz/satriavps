@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatriaVps - Advanced Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="alertBox" class="alert"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1>SatriaVps</h1>
+            <p>Advanced VPS & Pterodactyl Management System</p>
+            <div style="margin-top: 15px;">
+                <span class="status-badge"><i class="fas fa-satellite-dish"></i> SYSTEM ONLINE</span>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <button class="nav-btn active" data-target="vps"><i class="fas fa-server"></i> Manage VPS</button>
+            <button class="nav-btn" data-target="install"><i class="fas fa-download"></i> Installer</button>
+            <button class="nav-btn" data-target="protect"><i class="fas fa-shield-halved"></i> Protect Panel</button>
+            <button class="nav-btn" data-target="panel"><i class="fas fa-cubes"></i> Create Panel</button>
+            <button class="nav-btn" data-target="encrypt"><i class="fas fa-code"></i> Encrypt JS</button>
+        </nav>
+
+        <section id="vps" class="section active">
+            <div class="card">
+                <h2 class="post-title"><i class="fas fa-cloud"></i> DigitalOcean VPS Manager</h2>
+                
+                <form id="formCreateVps" class="admin-access">
+                    <div class="form-group">
+                        <label>DO API Key</label>
+                        <input type="password" id="doApiKey" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hostname</label>
+                        <input type="text" id="vpsHostname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Spesifikasi & Region</label>
+                        <select id="vpsSpec" class="form-control" style="margin-bottom: 10px;" required>
+                            <option value="s-1vcpu-1gb">Ram 1GB Core 1</option>
+                            <option value="s-2vcpu-2gb">Ram 2GB Core 2</option>
+                            <option value="s-2vcpu-4gb">Ram 4GB Core 2</option>
+                            <option value="s-4vcpu-8gb">Ram 8GB Core 4</option>
+                            <option value="s-4vcpu-16gb-amd">Ram 16GB Core 4</option>
+                            <option value="s-8vcpu-16gb-amd">Ram 16GB Core 8</option>
+                            <option value="s-8vcpu-32gb-amd">Ram 32GB Core 8</option>
+                        </select>
+                        <select id="vpsRegion" class="form-control" required>
+                            <option value="sgp1">Singapore (sgp1)</option>
+                            <option value="nyc1">New York (nyc1)</option>
+                            <option value="sfo3">San Francisco (sfo3)</option>
+                            <option value="lon1">London (lon1)</option>
+                            <option value="fra1">Frankfurt (fra1)</option>
+                            <option value="ams3">Amsterdam (ams3)</option>
+                            <option value="tor1">Toronto (tor1)</option>
+                            <option value="blr1">Bangalore (blr1)</option>
+                        </select>
+                        <select id="vpsImage" class="form-control" style="margin-top: 10px;" required>
+                            <option value="ubuntu-20-04-x64">Ubuntu 20.04 LTS</option>
+                            <option value="ubuntu-22-04-x64">Ubuntu 22.04 LTS</option>
+                            <option value="ubuntu-24-04-x64">Ubuntu 24.04 LTS</option>
+                            <option value="debian-11-x64">Debian 11</option>
+                            <option value="debian-12-x64">Debian 12</option>
+                        </select>
+                    </div>
+                    <div class="post-actions" style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Create VPS</button>
+                        <button type="button" id="btnListVps" class="btn btn-secondary"><i class="fas fa-list"></i> List VPS</button>
+                    </div>
+                </form>
+                <div id="vpsResult" class="code-preview" style="display: none; margin-top: 20px;"></div>
+            </div>
+        </section>
+
+        <section id="install" class="section">
+            <div class="card">
+                <h2 class="post-title"><i class="fas fa-terminal"></i> Pterodactyl Auto Installer</h2>
+                <form id="formInstall" class="admin-access">
+                    <div class="form-group">
+                        <label>Target VPS IP</label>
+                        <input type="text" id="instIp" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Root Password</label>
+                        <input type="password" id="instPass" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Domain Panel / Node</label>
+                        <input type="text" id="instDomain" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Aksi Instalasi</label>
+                        <select id="instAction" class="form-control" required>
+                            <option value="panel">Install Panel Saja</option>
+                            <option value="wings">Install Wings Saja</option>
+                            <option value="all">Install Panel + Wings</option>
+                            <option value="ssl">Reinstall/Fix SSL</option>
+                            <option value="uninstall_panel">Uninstall Panel</option>
+                            <option value="uninstall_wings">Uninstall Wings</option>
+                            <option value="uninstall_all">Uninstall All</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-rocket"></i> Eksekusi Installer</button>
+                </form>
+                <div id="instResult" class="code-preview" style="display: none; margin-top: 20px; max-height: 300px; overflow-y: auto;"></div>
+            </div>
+        </section>
+
+        <section id="protect" class="section">
+            <div class="card">
+                <h2 class="post-title"><i class="fas fa-lock"></i> Panel Security Protect</h2>
+                <form id="formProtect" class="admin-access">
+                    <div class="form-group">
+                        <label>VPS IP & Root Password</label>
+                        <input type="text" id="protIp" class="form-control" required style="margin-bottom: 10px;">
+                        <input type="password" id="protPass" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilih Tipe Proteksi</label>
+                        <select id="protType" class="form-control" required>
+                            <option value="1">Protect 1 (Anti Intip & Auto Owner)</option>
+                            <option value="2">Protect 2 (Anti Edit Users)</option>
+                            <option value="3">Protect 3 (Anti Intip Locations)</option>
+                            <option value="4">Protect 4 (Anti Intip Nodes)</option>
+                            <option value="5">Protect 5 (Anti Intip Nests)</option>
+                            <option value="6">Protect 6 (Anti Edit Panel Settings)</option>
+                            <option value="7">Protect 7 (Anti Akses File Server Lain)</option>
+                            <option value="8">Protect 8 (Anti Intip Server Info)</option>
+                            <option value="9">Protect 9 (Anti Intip App API)</option>
+                            <option value="10">Protect 10 (Anti Create Client API)</option>
+                            <option value="11">Protect 11 (Anti Intip Database)</option>
+                            <option value="12">Protect 12 (Anti Intip Mounts)</option>
+                            <option value="13">Protect 13 (Anti Button Two Factor)</option>
+                            <option value="14">Protect 14 (Hide Menu Admin Sidebar)</option>
+                        </select>
+                    </div>
+                    <div class="post-actions">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-shield-check"></i> Install Protect</button>
+                        <button type="button" id="btnUnprotect" class="btn btn-danger"><i class="fas fa-shield-slash"></i> Uninstall Protect</button>
+                    </div>
+                </form>
+                <div id="protResult" class="code-preview" style="display: none; margin-top: 20px;"></div>
+            </div>
+        </section>
+
+        <section id="panel" class="section">
+            <div class="card">
+                <h2 class="post-title"><i class="fas fa-server"></i> Pterodactyl Server Creator</h2>
+                <form id="formPanel" class="admin-access">
+                    <div class="form-group">
+                        <label>Domain Panel & API Key (PLTA)</label>
+                        <input type="text" id="pnlDomain" class="form-control" required style="margin-bottom: 10px;">
+                        <input type="password" id="pnlKey" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Username Panel</label>
+                        <input type="text" id="pnlUser" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Spesifikasi Ram</label>
+                        <select id="pnlPlan" class="form-control" required>
+                            <option value="1024">1 GB RAM</option>
+                            <option value="2048">2 GB RAM</option>
+                            <option value="3072">3 GB RAM</option>
+                            <option value="4096">4 GB RAM</option>
+                            <option value="5120">5 GB RAM</option>
+                            <option value="6144">6 GB RAM</option>
+                            <option value="7168">7 GB RAM</option>
+                            <option value="8192">8 GB RAM</option>
+                            <option value="9216">9 GB RAM</option>
+                            <option value="10240">10 GB RAM</option>
+                            <option value="0">Unlimited RAM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Node ID & Egg ID & Location ID</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="pnlNode" class="form-control" required placeholder="Node">
+                            <input type="number" id="pnlEgg" class="form-control" required placeholder="Egg">
+                            <input type="number" id="pnlLoc" class="form-control" required placeholder="Location">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-play"></i> Deploy Server</button>
+                </form>
+                <div id="pnlResult" class="code-preview" style="display: none; margin-top: 20px;"></div>
+            </div>
+        </section>
+
+        <section id="encrypt" class="section">
+            <div class="card">
+                <h2 class="post-title"><i class="fas fa-file-code"></i> Advanced JS Obfuscator</h2>
+                <form id="formEncrypt" class="admin-access" style="max-width: 100%;">
+                    <div class="form-group">
+                        <label>Source Code (JavaScript)</label>
+                        <textarea id="encInput" class="code-editor" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Metode Enkripsi</label>
+                        <select id="encMethod" class="form-control" required>
+                            <option value="high">Standard High</option>
+                            <option value="medium">Standard Medium</option>
+                            <option value="low">Standard Low</option>
+                            <option value="china">Mandarin Hardened</option>
+                            <option value="arab">Arab Hardened</option>
+                            <option value="japan">Japan Hardened</option>
+                            <option value="japxab">Japan x Arab Hardened</option>
+                            <option value="quantum">Quantum Vortex</option>
+                            <option value="stealth">Stealth Invisible</option>
+                            <option value="siu">Calcrick Chaos</option>
+                            <option value="nebula">Nebula Polymorphic</option>
+                            <option value="nova">Nova Dynamic</option>
+                            <option value="x">X Invisible</option>
+                            <option value="ultra">Ultra Hardened</option>
+                            <option value="strong">Strong Hardened</option>
+                            <option value="invis">Invisible Hardened</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-lock"></i> Obfuscate Code</button>
+                </form>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Encrypted Result</label>
+                    <textarea id="encOutput" class="code-editor" readonly></textarea>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2026 SatriaVps Management System. All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
